@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>山城拾光 Mountain Select</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+  --bg:#f7f3ee;
+  --card:#ffffff;
+  --brown:#8b6b4f;
+  --green:#425246;
+  --text:#2b2b2b;
+  --shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  font-family:"Noto Sans TC",sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  overflow-x:hidden;
+}
+
+img{
+  width:100%;
+  display:block;
+}
+
+a{
+  text-decoration:none;
+  color:inherit;
+}
+
+section{
+  padding:120px 8%;
+}
+
+.navbar{
+  position:fixed;
+  top:0;
+  width:100%;
+  z-index:999;
+  padding:20px 8%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:rgba(255,255,255,.55);
+  backdrop-filter:blur(12px);
+}
+
+.logo{
+  font-size:1.2rem;
+  font-weight:700;
+}
+
+.logo span{
+  display:block;
+  font-size:.7rem;
+  color:#777;
+  letter-spacing:2px;
+}
+
+nav{
+  display:flex;
+  gap:40px;
+}
+
+nav a{
+  position:relative;
+}
+
+nav a::after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:-5px;
+  width:0;
+  height:1px;
+  background:var(--green);
+  transition:.3s;
+}
+
+nav a:hover::after{
+  width:100%;
+}
+
+.hero{
+  height:100vh;
+  background:
+  linear-gradient(rgba(0,0,0,.3),rgba(0,0,0,.35)),
+  url("https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1600&auto=format&fit=crop");
+  background-size:cover;
+  background-position:center;
+  display:flex;
+  align-items:center;
+  position:relative;
+}
+
+.hero-content{
+  color:white;
+  padding:0 8%;
+  max-width:700px;
+}
+
+.sub-title{
+  letter-spacing:4px;
+  margin-bottom:20px;
+}
+
+.hero h1{
+  font-size:5rem;
+  line-height:1.1;
+  margin-bottom:25px;
+}
+
+.hero h1 span{
+  display:block;
+  font-size:1rem;
+  margin-top:15px;
+  letter-spacing:5px;
+}
+
+.hero-text{
+  line-height:2;
+  margin-bottom:40px;
+}
+
+.hero-btn{
+  display:inline-block;
+  padding:18px 36px;
+  border-radius:999px;
+  background:white;
+  color:black;
+  transition:.3s;
+}
+
+.hero-btn:hover{
+  transform:translateY(-5px);
+}
+
+.story{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:80px;
+  align-items:center;
+}
+
+.story img{
+  border-radius:30px;
+  box-shadow:var(--shadow);
+}
+
+.section-label{
+  color:var(--brown);
+  letter-spacing:3px;
+  margin-bottom:15px;
+}
+
+.story h2,
+.products h2,
+.travel h2{
+  font-size:3rem;
+  margin-bottom:25px;
+}
+
+.story p{
+  line-height:2;
+}
+
+.timeline{
+  margin-top:40px;
+  display:flex;
+  flex-direction:column;
+  gap:25px;
+}
+
+.timeline-item{
+  display:flex;
+  gap:20px;
+}
+
+.timeline-item span{
+  width:50px;
+  height:50px;
+  border-radius:50%;
+  background:var(--green);
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.section-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:end;
+  margin-bottom:60px;
+}
+
+.filter-area{
+  display:flex;
+  gap:15px;
+}
+
+.filter-area input,
+.filter-area select{
+  padding:14px;
+  border:none;
+  border-radius:12px;
+  background:white;
+  box-shadow:var(--shadow);
+}
+
+.product-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:35px;
+}
+
+.product-card{
+  background:white;
+  border-radius:24px;
+  overflow:hidden;
+  box-shadow:var(--shadow);
+  transition:.4s;
+}
+
+.product-card:hover{
+  transform:translateY(-10px);
+}
+
+.product-card img{
+  height:300px;
+  object-fit:cover;
+}
+
+.product-info{
+  padding:24px;
+}
+
+.price{
+  color:var(--brown);
+  margin:16px 0;
+  font-weight:700;
+}
+
+.add-cart{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:12px;
+  background:var(--green);
+  color:white;
+  cursor:pointer;
+}
+
+.travel{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:60px;
+  align-items:center;
+}
+
+.travel img{
+  border-radius:30px;
+  box-shadow:var(--shadow);
+}
+
+.newsletter{
+  text-align:center;
+}
+
+.newsletter-form{
+  margin-top:30px;
+  display:flex;
+  justify-content:center;
+  gap:15px;
+  flex-wrap:wrap;
+}
+
+.newsletter-form input{
+  width:320px;
+  padding:16px;
+  border:none;
+  border-radius:999px;
+  box-shadow:var(--shadow);
+}
+
+.newsletter-form button{
+  padding:16px 28px;
+  border:none;
+  border-radius:999px;
+  background:var(--green);
+  color:white;
+}
+
+footer{
+  padding:60px 8%;
+  border-top:1px solid rgba(0,0,0,.08);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.footer-links{
+  display:flex;
+  gap:20px;
+}
+
+@media(max-width:900px){
+
+  .story,
+  .travel{
+    grid-template-columns:1fr;
+  }
+
+  .hero h1{
+    font-size:3rem;
+  }
+
+  nav{
+    display:none;
+  }
+
+  footer{
+    flex-direction:column;
+    gap:20px;
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="navbar">
+
+  <div class="logo">
+    山城拾光
+    <span>Mountain Select</span>
+  </div>
+
+  <nav>
+    <a href="#story">品牌故事</a>
+    <a href="#products">山城選物</a>
+    <a href="#travel">旅遊地圖</a>
+  </nav>
+
+</header>
+
+<section class="hero">
+
+  <div class="hero-content">
+
+    <p class="sub-title">
+      MIAOLI MOUNTAIN LIFESTYLE
+    </p>
+
+    <h1>
+      山城拾光
+      <span>Mountain Select</span>
+    </h1>
+
+    <p class="hero-text">
+      將苗栗山城的霧氣、茶香與慢生活，
+      收藏進每一件溫暖的地方選物裡。
+    </p>
+
+    <a href="#products" class="hero-btn">
+      立即選購
+    </a>
+
+  </div>
+
+</section>
+
+<section class="story" id="story">
+
+  <img src="https://miaolitravel.net/Att_FCK/%E8%88%8A%E5%B1%B1%E7%B7%9A%E9%90%B5%E9%81%93%E8%87%AA%E8%A1%8C%E8%BB%8A.jpeg">
+
+  <div>
+
+    <p class="section-label">
+      BRAND STORY
+    </p>
+
+    <h2>
+      山林、客庄與地方創生
+    </h2>
+
+    <p>
+      山城拾光以苗栗山城文化為靈感，
+      結合客家工藝、山林茶香與慢生活美學，
+      讓地方文化以更溫柔的方式走進日常。
+    </p>
+
+    <div class="timeline">
+
+      <div class="timeline-item">
+        <span>01</span>
+        <div>
+          <h3>客庄文化</h3>
+          <p>融合擂茶、藍染與山城工藝。</p>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <span>02</span>
+        <div>
+          <h3>地方創生</h3>
+          <p>支持苗栗在地職人與小農。</p>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <span>03</span>
+        <div>
+          <h3>慢生活</h3>
+          <p>打造山中咖啡館般的生活感。</p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<section class="products" id="products">
+
+  <div class="section-head">
+
+    <div>
+      <p class="section-label">MOUNTAIN GOODS</p>
+      <h2>山城選物</h2>
+    </div>
+
+    <div class="filter-area">
+      <input type="text" placeholder="搜尋商品">
+      <select>
+        <option>全部分類</option>
+        <option>茶品</option>
+        <option>工藝</option>
+      </select>
+    </div>
+
+  </div>
+
+  <div class="product-grid">
+
+    <div class="product-card">
+
+      <img src="https://doqvf81n9htmm.cloudfront.net/data/crop_article/91721/16135136.jpg_1140x855.jpg">
+
+      <div class="product-info">
+
+        <h3>東方美人茶</h3>
+
+        <p class="price">
+          NT$ 880
+        </p>
+
+        <button class="add-cart">
+          加入購物車
+        </button>
+
+      </div>
+
+    </div>
+
+    <div class="product-card">
+
+      <img src="https://cdn.fontrip.com/fontour/file/show/8r4Qj/1024.jpg">
+
+      <div class="product-info">
+
+        <h3>客家擂茶</h3>
+
+        <p class="price">
+          NT$ 120
+        </p>
+
+        <button class="add-cart">
+          加入購物車
+        </button>
+
+      </div>
+
+    </div>
+
+    <div class="product-card">
+
+      <img src="https://www.thecan.com.tw/cdn/upload/image/20201204/36887e7a-2a91-4132-860c-c0454297ef2c.jpg">
+
+      <div class="product-info">
+
+        <h3>藍染布品</h3>
+
+        <p class="price">
+          NT$ 350
+        </p>
+
+        <button class="add-cart">
+          加入購物車
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<section class="travel" id="travel">
+
+  <div>
+
+    <p class="section-label">
+      MIAOLI MAP
+    </p>
+
+    <h2>
+      苗栗山城慢旅行
+    </h2>
+
+    <p style="line-height:2;">
+      從南庄、獅潭到山線鐵道，
+      用旅行重新感受苗栗山城的節奏與霧氣。
+    </p>
+
+  </div>
+
+  <img src="https://disk.sharelife.tw/gallery/59175-100952/1116100821313611.jpg">
+
+</section>
+
+<section class="newsletter">
+
+  <h2>
+    訂閱山城通信
+  </h2>
+
+  <p style="margin-top:15px;">
+    收下季節選物、山城故事與地方風景。
+  </p>
+
+  <div class="newsletter-form">
+
+    <input type="email" placeholder="輸入 Email">
+
+    <button>
+      訂閱
+    </button>
+
+  </div>
+
+</section>
+
+<footer>
+
+  <div>
+    山城拾光 Mountain Select
+  </div>
+
+  <div class="footer-links">
+    <a href="#">Instagram</a>
+    <a href="#">Facebook</a>
+    <a href="#">Threads</a>
+  </div>
+
+</footer>
+
+</body>
+</html>
