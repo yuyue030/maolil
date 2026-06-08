@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-<!-- Google tag (gtag.js) -->
+	<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-F79Y829S6F"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -11,8 +11,8 @@
   gtag('config', 'G-F79Y829S6F');
 </script>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <!-- 【SEO 標籤與內容埋設規格】 -->
     <title>苗栗公館農村社區小舖 | 無添加紅棗乾與健康伴手禮推薦</title>
     <meta name="description" content="尋找過年長輩送禮推薦？苗栗公館農村社區小舖提供無添加紅棗乾、天然減糖福菜。在地小農直送，是您健康無負擔的伴手禮首選。">
@@ -97,7 +97,19 @@
 
         /* 第一屏主視覺 */
         .hero {
-            background: linear-gradient(rgba(74, 93, 78, 0.75), rgba(74, 93, 78, 0.45)), url('https://images.unsplash.com/photo-1596436889106-be35e843f974?auto=format&fit=crop&w=1920&q=80') center/cover;
+            background:
+                linear-gradient(
+                    rgba(0, 0, 0, 0.35),
+                    rgba(0, 0, 0, 0.45)
+                ),
+                url('https://cdn1-next.cybassets.com/media/W1siZiIsIjI2NjE2L2F0dGFjaGVkX3Bob3Rvcy8xNzMzOTEyMTAyX-aXhemBiuWcsOWcli1WMi0xMy5qcGcuanBlZyJdXQ.jpeg?sha=4a2bc32741dcb616');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             padding: 120px 0; text-align: center; color: white;
         }
         .hero h1 { color: white; font-size: 2.5rem; margin-bottom: 20px; }
@@ -279,7 +291,54 @@
             </div>
         </section>
 
-        <!-- 看得到的真誠檢驗區 -->
+        
+        <!-- 熱銷商品預覽 -->
+        <section style="padding:80px 0;background:#f8f1eb;" data-aos="fade-up">
+            <div class="container">
+                <h2 style="text-align:center;margin-bottom:40px;">明星商品</h2>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:25px;">
+                    <div style="background:#fff;padding:15px;border-radius:12px;text-align:center;">
+                        <img src="https://cdn1-next.cybassets.com/media/W1siZiIsIjI2NjE2L3Byb2R1Y3RzLzU0NTg2NTM5LzE3NDI2NTkzNzVfZDNmODAzZGVkY2U2YjEzYjJiNzUuanBlZyJdLFsicCIsInRodW1iIiwiNjAweDYwMCJdXQ.jpeg?sha=b931327e9735a6c4" style="width:100%;height:220px;object-fit:contain;">
+                        <h3>芋頭脆片</h3><p>NT$120</p>
+                    </div>
+                    <div style="background:#fff;padding:15px;border-radius:12px;text-align:center;">
+                        <img src="https://cdn1-next.cybassets.com/media/W1siZiIsIjI2NjE2L3Byb2R1Y3RzLzQyMzkwOTQ0LzE3MTk1NDAyNTdfM2Y0ZmM0MWY2YWFhOGU5ZjgyMjUuanBlZyJdLFsicCIsInRodW1iIiwiNjAweDYwMCJdXQ.jpeg?sha=745e9c90c856c355" style="width:100%;height:220px;object-fit:contain;">
+                        <h3>紅棗乾</h3><p>NT$250</p>
+                    </div>
+                    <div style="background:#fff;padding:15px;border-radius:12px;text-align:center;">
+                        <img src="https://cdn-general.cybassets.com/media/W1siZiIsIjI2NjE2L3Byb2R1Y3RzLzQyNDMwNTY1LzE3MTk1NDEzMDhfMzU1MjVjZmMxZjA4ZjY0M2NlZTIuanBlZyJdLFsicCIsInRodW1iIiwiMjA0OHgyMDQ4Il1d.jpeg?sha=8b0304ede63c42cb" style="width:100%;height:220px;object-fit:contain;">
+                        <h3>客家福菜</h3><p>NT$180</p>
+                    </div>
+                    <div style="background:#fff;padding:15px;border-radius:12px;text-align:center;">
+                        <img src="https://cdn1-next.cybassets.com/media/W1siZiIsIjI2NjE2L3Byb2R1Y3RzLzQyNDIyODA3LzE3NzM4MDk0MTZfMjMzYzk0ZDEyODFlMTQ1Zjg5ZmUuanBlZyJdLFsicCIsInRodW1iIiwiNDgweDQ4MCJdXQ.jpeg?sha=7dc9ecd784cf4546" style="width:100%;height:220px;object-fit:contain;">
+                        <h3>紅棗養生茶</h3><p>NT$320</p>
+                    </div>
+                </div>
+                <div style="text-align:center;margin-top:30px;">
+                    <button class="btn btn-primary" onclick="switchPage('shop', event)">查看更多商品</button>
+                </div>
+            </div>
+        </section>
+
+        <section style="padding:80px 0;background:#fff;" data-aos="fade-up" data-aos-delay="150">
+            <div class="container" style="display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:center;">
+                <div>
+                    <h2>關於社區小鋪市集</h2>
+                    <p>社區小鋪市集以推廣苗栗公館在地農產、客家特色食品及小農品牌為核心，提供消費者認識地方產業與選購優質產品的平台。</p>
+                    <p><strong>地址：</strong>苗栗縣公館鄉館南村館南352號</p>
+                    <p><strong>商品範疇：</strong>紅棗系列商品、芋頭加工品、客家福菜、梅干菜、茶飲、伴手禮與在地農特產品。</p>
+                    <p><strong>發展特色：</strong>串聯在地農民與社區店家，協助特色商品曝光，推動地方創生與社區經濟。</p>
+                    <p><strong>營業時間：</strong>建議依官方 Facebook 公告為準。</p>
+                    <a href="https://www.facebook.com/farmer88.taiwan/" target="_blank" style="display:inline-flex;align-items:center;gap:10px;padding:12px 18px;background:#1877F2;color:white;text-decoration:none;border-radius:8px;font-weight:700;margin-top:10px;">
+<span style="font-size:20px;">📘</span> 社區小鋪市集 Facebook
+</a>
+                </div>
+                <div>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhXigb2Z5oYKpMaqB2jafq5G2W2icUIkt4uw&s.jpg" style="width:100%;border-radius:12px;">
+                </div>
+            </div>
+        </section>
+<!-- 看得到的真誠檢驗區 -->
         <section class="verification" data-aos="fade-up">
             <div class="container">
                 <h2>👑 看得到的真誠：公館特產的國家級驗證標準</h2>
@@ -510,11 +569,11 @@
 
     <!-- AI 智能虛擬助手互動模組 -->
     <div class="ai-assistant">
-        <button class="ai-btn" onclick="toggleAIWindow()">小舖<br>AI助手</button>
+        <button class="ai-btn" onclick="toggleAIWindow()">AI<br>Agent</button>
         <div class="ai-window" id="aiWindow">
-            <div class="ai-header">🤖 苗栗小舖 AI 智能客服</div>
+            <div class="ai-header">🤖 社區小鋪 AI Agent｜智慧伴手禮顧問</div>
             <div class="ai-chat" id="aiChatLog">
-                <div><strong>AI 助手:</strong> 您好！我是苗栗公館農會小舖的虛擬助手。請問您正在尋找過年長輩送禮推薦，還是想了解我們的無添加紅棗、芋頭脆片或客家福菜呢？</div>
+                <div><strong>AI 助手:</strong> 您好！我是 AI Agent，可以依照送禮對象、預算與需求推薦商品。！我是苗栗公館農會小舖的虛擬助手。請問您正在尋找過年長輩送禮推薦，還是想了解我們的無添加紅棗、芋頭脆片或客家福菜呢？</div>
             </div>
             <div class="ai-input-box">
                 <input type="text" class="ai-input" id="aiInputField" placeholder="輸入：紅棗、芋頭、福菜、陶瓷博物館...">
@@ -563,7 +622,10 @@
             // 平滑滾動到首頁故事的提貨券與博物館優惠說明區塊
             setTimeout(() => {
                 const element = document.getElementById('offline-ticket-section');
-                if(element) element.scrollIntoView({ behavior: 'smooth' });
+                if(element){
+const y=element.getBoundingClientRect().top+window.pageYOffset-120;
+window.scrollTo({top:y,behavior:'smooth'});
+}
             }, 300);
         }
 
