@@ -645,3 +645,176 @@
             document.getElementById('cartTotal').innerText = 'NT$ ' + total;
         }
 
+// 開啟模擬結帳
+        function openCheckoutModal() {
+            if(cart.length === 0) { alert("您的購物車目前是空的喔！"); return; }
+            const orderDetails = document.getElementById('orderDetails');
+            orderDetails.innerHTML = '<strong>已付費商品明細：</strong><br>';
+            cart.forEach(item => orderDetails.innerHTML += `・${item.name} - NT$ ${item.price}<br>`);
+            
+            const randomSerial = "GG-" + Math.floor(10000 + Math.random() * 90000) + "-SHOP";
+            document.getElementById('pickupSerial').innerText = randomSerial;
+
+            toggleCart(false);
+            document.getElementById('checkoutModal').style.display = 'flex';
+        }
+
+        function closeCheckoutModal() {
+            document.getElementById('checkoutModal').style.display = 'none';
+            cart = [];
+            updateCartUI();
+            switchPage('home');
+        }
+
+        // 商品分類篩選
+        function filterProducts(category) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            const clickedBtn = document.querySelector(`[onclick="filterProducts('${category}')"]`);
+            if(clickedBtn) clickedBtn.classList.add('active');
+
+            const cards = document.querySelectorAll('.product-card');
+            let visibleIndex = 0;
+            cards.forEach((card) => {
+                const cardCategory = card.getAttribute('data-category');
+                if (category === 'all' || cardCategory === category) {
+                    card.style.display = 'block';
+                    setTimeout(() => {
+                        card.classList.add('show-card');
+                    }, visibleIndex * 80);
+                    visibleIndex++;
+                } else {
+                    card.classList.remove('show-card');
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        /* ==================== 重構版公館天氣小助手 ==================== */
+        
+        // 負責切換 AI 視窗的開與關
+        function toggleAIWindow() { 
+            const aiWindow = document.getElementById('aiWindow');
+            aiWindow.classList.toggle('open');
+        }
+
+        // 新增核心：異步連線至台灣中央氣象署獲取未來三個預報時段
+        async function getTaiwanWeather(locationName) {
+            const formattedLocation = locationName.replace("台", "臺");
+            const cwaApiKey = "CWA-6EEA703B-5CF5-4C10-9315-092A3889052C"; 
+            const url = `https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=${cwaApiKey}&locationName=${formattedLocation}`;
+            
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error("網路連線異常");
+                const data = await response.json();
+                return data.records.location[0].weatherElement;
+            } catch (error) {
+                console.error("氣象局連線失敗:", error);
+                return null;
+            }
+        }
+
+        // 當使用者點擊送出或按 Enter 時觸發的主程式大腦
+        async function askAIUserQuestion() {
+            const inputField = document.getElementById('aiInputField');
+            const chatLog = document.getElementById('aiChatLog');
+            const query = inputField.value.trim();
+            if(!query) return;
+
+            // 渲染使用者輸入
+            chatLog.innerHTML += `<div><span style="color:var(--accent-color);"><strong>您:</strong></span> ${query}</div>`;
+            inputField.value = '';
+            chatLog.scrollTop = chatLog.scrollHeight;
+
+            let reply = "您好！我是社區小舖的智慧顧問。您可以詢問今天、明天、週末天氣，要不要帶傘，或適不適合來公館遊玩；也可以詢問紅棗、芋頭與福菜商品資訊喔！";
+            
+            // 偵測天氣與旅遊相關關鍵字
+            const hasWeatherKeywords = ['天氣', '下雨', '氣溫', '冷', '熱', '傘', '玩', '遊', '出門', '週末', '周末', '今天', '明天'].some(keyword => query.includes(keyword));
+
+            if (hasWeatherKeywords) {
+                let targetLocation = "苗栗縣"; 
+                if (query.includes('台北') || query.includes('臺北')) targetLocation = "臺北市";
+                else if (query.includes('台中') || query.includes('臺中')) targetLocation = "臺中市";
+                else if (query.includes('高雄')) targetLocation = "高雄市";
+                else if (query.includes('新竹')) targetLocation = "新竹縣";
+                else if (query.includes('桃園')) targetLocation = "桃園市";
+                else if (query.includes('台南') || query.includes('臺南')) targetLocation = "臺南市";
+
+                const formattedLocation = targetLocation.replace("台", "臺");
+                const weatherElements = await getTaiwanWeather(formattedLocation);
+                
+                if (weatherElements) {
+                    // 📅 依時間點智慧選擇氣象署預報時段 (0:今天, 1:明天, 2:週末趨勢)
+                    let timeIndex = 0;
+                    let timeName = "今天";
+
+                    if (query.includes('明天')) {
+                        timeIndex = 1;
+                        timeName = "明天";
+                    } else if (query.includes('週末') || query.includes('周末')) {
+                        timeIndex = 2;
+                        timeName = "本週末";
+                    }
+
+                    const state = weatherElements[0].time[timeIndex].parameter.parameterName; // 天氣現象
+                    const rainChance = parseInt(weatherElements[1].time[timeIndex].parameter.parameterName); // 降雨機率
+                    const minT = weatherElements[2].time[timeIndex].parameter.parameterName; // 最低溫
+                    const maxT = weatherElements[4].time[timeIndex].parameter.parameterName; // 最高溫
+                    
+                    // ☔ 帶傘決策
+                    let umbrellaAdvice = "目前看起來降雨機率低，不需要帶傘，可以輕鬆出門！";
+                    if (rainChance >= 30 && rainChance < 60) {
+                        umbrellaAdvice = `該時段降雨機率為 ${rainChance}%，雖然主要為 ${state}，但仍有些微機率飄雨，建議帶把折疊傘備用最保險喔！`;
+                    } else if (rainChance >= 60) {
+                        umbrellaAdvice = `降雨機率高達 ${rainChance}% (${state})！出門強烈建議帶大傘或雨衣，開車騎車也要特別注意安全！`;
+                    }
+
+                    // 🗺️ 旅遊決策
+                    let travelAdvice = `目前${timeName}公館預報為 ${state}，氣溫 ${minT}°C ~ ${maxT}°C，非常適合安排一趟公館農村小旅行！可以順道來我們社區小舖和陶瓷博物館逛逛特色展品、採購伴手禮喔！`;
+                    
+                    if (state.includes('雨') || rainChance >= 50) {
+                        travelAdvice = `${timeName}公館天氣受 ${state} 影響，降雨機率達 ${rainChance}%。雖然戶外不太方便，但我們的「苗栗陶瓷博物館」和「農村社區小舖」都是舒適的『室內園區』，全館免門票還有強冷氣，外面下大雨來這裡喝杯溫熱紅棗茶、看柴窯文化，是最完美的雨天避難文化之旅喔！`;
+                    } else if (parseInt(maxT) >= 33) {
+                        travelAdvice = `${timeName}公館陽光普照但氣溫較高（最高溫達 ${maxT}°C），戶外遊玩記得多防曬補水。走累了非常推薦躲進來我們農會小舖和陶瓷博物館裡吹冷氣，吹涼之餘還能試吃店內超夯的檳榔心芋頭脆片喔！`;
+                    }
+
+                    // 組織最終客製化回覆
+                    if (query.includes('傘')) {
+                        reply = `關於帶傘的建議：${umbrellaAdvice} （${formattedLocation}${timeName}預報：${state}，降雨機率 ${rainChance}%）`;
+                    } else if (query.includes('玩') || query.includes('遊') || query.includes('行程') || query.includes('去')) {
+                        reply = `為您評估${timeName}前往公館遊玩的行程：${travelAdvice}`;
+                    } else {
+                        reply = `幫您連線中央氣象署，查到${formattedLocation}${timeName}的官方即時預報囉！☀️ 天氣狀況為【${state}】，氣溫落在 ${minT}°C ~ ${maxT}°C 之間，整體降雨機率為 ${rainChance}%。<br><br>💡 **貼心防護建議**：${umbrellaAdvice}`;
+                    }
+                } else {
+                    reply = "哎呀，剛剛與國家氣象署的連線稍微塞車了。不過別擔心，來公館遊玩的話，我們的社區小舖與陶瓷博物館都是有冷氣的優質室內展館，不論大太陽或下雨都很適合參觀！您可以先輸入「紅棗」、「芋頭」或「福菜」讓我先為您介紹在地特產喔！";
+                }
+                
+            } else if(query.includes('紅棗') || query.includes('伴手禮') || query.includes('啤酒') || query.includes('酥')) {
+                reply = "公館是全台唯一的紅棗專業產區！除了經典的無添加紅棗乾與養生茶外，我們商城還有超夯的「紅棗酥」禮盒及帶有果香的「紅棗啤酒」，非常適合逢年過節送給長輩與親友！";
+            } else if(query.includes('芋頭') || query.includes('脆片')) {
+                reply = "苗栗公館也是優質檳榔心芋的核心產區！我們的「芋頭脆片」採用真空低溫烘焙技術，口感極致香脆，且完全無添加人工色素與防腐劑，是店內超夯的休閒零嘴！";
+            } else if(query.includes('福菜') || query.includes('梅干菜') || query.includes('芥菜')) {
+                reply = "道地客家傳統美味！我們利用公館在地芥菜手工醃製出「傳統減糖福菜」與「客家梅干菜」，少鹽減糖更符合現代健康概念，燉湯扣肉都超對味！";
+            } else if(query.includes('博物館') || query.includes('陶瓷') || query.includes('特色館') || query.includes('DIY')) {
+                reply = "苗栗陶瓷博物館（位於苗栗特色館內）是全館「免費參觀」的唷！現在配合小舖商城活動，憑提貨券簡訊線下可享有特色陶藝DIY體驗折扣，非常推薦帶長輩一起去逛逛！";
+            } else if(query.includes('驗證') || query.includes('安全')) {
+                reply = "本小舖所有商品全面通過「ISO22000國際級驗證」、「TAP產銷履歷農產品驗證」，並投保產品責任險，給您最真誠的安心保證！";
+            }
+
+            // 渲染 AI 回應
+            setTimeout(() => {
+                chatLog.innerHTML += `<div><strong>AI 助手:</strong> ${reply}</div>`;
+                chatLog.scrollTop = chatLog.scrollHeight;
+            }, 300);
+        }
+
+        // 綁定 Enter 鍵
+        document.getElementById('aiInputField').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                askAIUserQuestion();
+            }
+        });
+    </script>
+</body>
+</html>
